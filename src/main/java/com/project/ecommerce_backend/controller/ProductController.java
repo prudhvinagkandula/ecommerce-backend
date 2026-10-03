@@ -1,10 +1,10 @@
-package controller;
+package com.project.ecommerce_backend.controller;
 
-import entity.Product;
-import exception.ProductException;
+import com.project.ecommerce_backend.entity.Product;
+import com.project.ecommerce_backend.exception.ProductException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.ProductService;
+import com.project.ecommerce_backend.service.ProductService;
 
 import java.util.List;
 

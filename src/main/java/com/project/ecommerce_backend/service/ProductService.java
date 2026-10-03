@@ -1,9 +1,9 @@
-package service;
+package com.project.ecommerce_backend.service;
 
-import entity.Product;
-import exception.ProductException;
+import com.project.ecommerce_backend.entity.Product;
+import com.project.ecommerce_backend.exception.ProductException;
 import org.springframework.stereotype.Service;
-import repository.ProductRepository;
+import com.project.ecommerce_backend.repository.ProductRepository;
 
 import java.util.List;
 
