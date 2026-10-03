@@ -10,25 +10,28 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    public int productId;
+    private int productId;
     @Column(name="name")
-    public String productName;
+    private String productName;
     @Column(name="description")
-    public String description;
+    private String description;
     @Column(name="price")
-    public float price;
+    private float price;
     @Column(name="stock_quantity")
-    public int stockQuantity;
+    private int stockQuantity;
     @Column(name="image_url")
-    public String imageUrl;
+    private String imageUrl;
     @Column(name="category_id")
-    public int categoryId;
+    private int categoryId;
     @Column(name="active")
-    public boolean active;
+    private boolean active;
     @Column(name="created_at")
-    public LocalTime createdAt;
+    private LocalTime createdAt;
     @Column(name="updated_at")
-    public LocalTime updatedAt;
+    private LocalTime updatedAt;
+    @ManyToOne()
+    @JoinColumn(name="category_id")
+    private Category category;
 
     public Product(){
 
@@ -127,6 +130,14 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -140,6 +151,7 @@ public class Product {
                 ", active=" + active +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", category=" + category +
                 '}';
     }
 }

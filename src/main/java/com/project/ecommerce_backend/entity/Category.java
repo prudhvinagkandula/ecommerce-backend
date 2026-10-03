@@ -3,6 +3,7 @@ package com.project.ecommerce_backend.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name="category")
@@ -10,13 +11,16 @@ public class Category {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
-    public int categoryId;
+    private int categoryId;
     @Column(name="name")
-    public String categoryName;
+    private String categoryName;
     @Column(name="description")
-    public String description;
+    private String description;
     @Column(name="created_at")
-    public LocalTime createdAt;
+    private LocalTime createdAt;
+    @OneToMany(mappedBy = "category",
+    cascade = CascadeType.ALL)
+    private List<Product> products;
 
     public Category(){
 
@@ -61,6 +65,14 @@ public class Category {
         this.description = description;
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public String toString() {
         return "Category{" +
@@ -68,6 +80,7 @@ public class Category {
                 ", categoryName='" + categoryName + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
+                ", products=" + products +
                 '}';
     }
 }

@@ -16,10 +16,10 @@ public class ProductServiceImplementation implements ProductService{
     }
 
     public Product saveProduct(Product product) throws ProductException {
-        if(product.price < 1){
+        if(product.getPrice() < 1){
             throw new  ProductException("price must be greater than zero");
         }
-        if(product.stockQuantity < 1){
+        if(product.getStockQuantity() < 1){
             throw new ProductException("stock quantity must be 1 or more than one");
         }
         return productRepository.save(product);
