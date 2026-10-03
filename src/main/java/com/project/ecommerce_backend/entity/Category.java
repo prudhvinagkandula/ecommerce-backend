@@ -1,38 +1,50 @@
 package com.project.ecommerce_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="category")
+@Table(name = "category")
 public class Category {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int categoryId;
-    @Column(name="name")
+    @Column(name = "name", nullable = false)
     private String categoryName;
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
-    @Column(name="created_at")
-    private LocalTime createdAt;
-    @OneToMany(mappedBy = "category",
-    cascade = CascadeType.ALL)
-    private List<Product> products;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Prevents infinite recursion during REST JSON serialization
+    private List<Product> products = new ArrayList<>();
 
-    public Category(){
-
+    public Category() {
     }
 
-    public Category(int categoryId, String categoryName, LocalTime createdAt, String description) {
-        this.categoryId = categoryId;
+    public Category(String categoryName, String description) {
         this.categoryName = categoryName;
-        this.createdAt = createdAt;
         this.description = description;
+        this.createdAt = LocalDateTime.now();
     }
 
+    // Helper synchronization methods
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setCategory(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setCategory(null);
+    }
+
+    // Getters and Setters
     public int getCategoryId() {
         return categoryId;
     }
@@ -49,11 +61,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public LocalTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -75,12 +87,12 @@ public class Category {
 
     @Override
     public String toString() {
+        // Excluded 'products' to prevent infinite recursion
         return "Category{" +
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
-                ", products=" + products +
                 '}';
     }
 }

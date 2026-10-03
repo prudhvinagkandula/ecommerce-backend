@@ -2,54 +2,52 @@ package com.project.ecommerce_backend.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name="products")
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int productId;
-    @Column(name="name")
+    @Column(name = "name", nullable = false)
     private String productName;
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
-    @Column(name="price")
+    @Column(name = "price", nullable = false)
     private float price;
-    @Column(name="stock_quantity")
+    @Column(name = "stock_quantity")
     private int stockQuantity;
-    @Column(name="image_url")
+    @Column(name = "image_url")
     private String imageUrl;
-    @Column(name="category_id")
-    private int categoryId;
-    @Column(name="active")
+    @Column(name = "active")
     private boolean active;
-    @Column(name="created_at")
-    private LocalTime createdAt;
-    @Column(name="updated_at")
-    private LocalTime updatedAt;
-    @ManyToOne()
-    @JoinColumn(name="category_id")
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    // Many products belong to one category (owns the foreign key 'category_id')
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    public Product(){
-
+    public Product() {
     }
 
-    public Product(int productId, String productName, String description, float price, int stockQuantity, String imageUrl, int categoryId, boolean active, LocalTime createdAt, LocalTime updatedAt) {
-        this.productId = productId;
+    public Product(String productName, String description, float price, int stockQuantity, String imageUrl, boolean active) {
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
         this.active = active;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
+    // Getters and Setters
     public int getProductId() {
         return productId;
     }
@@ -98,14 +96,6 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -114,19 +104,19 @@ public class Product {
         this.active = active;
     }
 
-    public LocalTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalTime getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -140,6 +130,7 @@ public class Product {
 
     @Override
     public String toString() {
+        // Excluded 'category' to prevent infinite recursion
         return "Product{" +
                 "productId=" + productId +
                 ", productName='" + productName + '\'' +
@@ -147,11 +138,9 @@ public class Product {
                 ", price=" + price +
                 ", stockQuantity=" + stockQuantity +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", categoryId=" + categoryId +
                 ", active=" + active +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", category=" + category +
                 '}';
     }
 }
